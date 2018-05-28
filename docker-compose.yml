@@ -1,0 +1,30 @@
+version: "3.2"
+services:
+    le:
+        image: certbot:certbot
+        entrypoint: certbot-auto certonly --standalone --email admin@example.com -d example.com
+    pgsql:
+        image: postgres:9.6-alpine
+        restart: always
+        environment:
+            POSTGRES_USER: xsshunter
+            POSTGRES_DB: xsshunter
+            POSTGRES_PASSWORD: xsshunter
+
+    xsshunter:
+        build: .
+        restart: always
+        environment:
+            - DOMAIN: vtx.sh
+            - EMAILFROM: test@email.com
+            - MAILGUNKEY: 1234
+            - MAILGUNDOM: vtx.sh
+            - ABUSEEMAIL: abuse@vtx.sh
+            - COOKIESECRET: secret
+        depends_on:
+            - le
+            - pgsql
+
+# Run LE container to get certs
+# Run PgSQL container to have a database
+# Run XSS Hunter container to recieve payload calls
