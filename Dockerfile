@@ -16,7 +16,7 @@ RUN apt-get update \
 RUN mkdir /xsshunter
 COPY . /xsshunter
 
-COPY conf/default.conf /etc/nginx.default.conf
+COPY conf/default.conf /etc/nginx/default.conf
 RUN sed -i "s|example.com|$DOMAIN|g" /etc/nginx/default.conf
 
 RUN echo "email_from: $EMAILFROM > /xsshunter/config.yml"

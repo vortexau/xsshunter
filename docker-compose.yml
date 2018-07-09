@@ -1,8 +1,8 @@
 version: "3.2"
 services:
     le:
-        image: certbot:certbot
-        entrypoint: certbot-auto certonly --standalone --email admin@example.com -d example.com
+        image: certbot/certbot
+        entrypoint: certbot-auto certonly --standalone --email cert@vtx.sh -d vtx.sh 
     pgsql:
         image: postgres:9.6-alpine
         restart: always
@@ -10,17 +10,16 @@ services:
             POSTGRES_USER: xsshunter
             POSTGRES_DB: xsshunter
             POSTGRES_PASSWORD: xsshunter
-
     xsshunter:
         build: .
         restart: always
         environment:
-            - DOMAIN: vtx.sh
-            - EMAILFROM: test@email.com
-            - MAILGUNKEY: 1234
-            - MAILGUNDOM: vtx.sh
-            - ABUSEEMAIL: abuse@vtx.sh
-            - COOKIESECRET: secret
+            - DOMAIN=${DOMAIN}
+            - EMAILFROM=${EMAILFROM}
+            - MAILGUNKEY=${MAILGUNKEY}
+            - MAILGUNDOM=${MAILGUNDOM}
+            - ABUSEEMAIL=${ABUSEEMAIL}
+            - COOKIESECRET=${COOKIESECRET}
         depends_on:
             - le
             - pgsql
